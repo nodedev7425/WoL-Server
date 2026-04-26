@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login</title>
+</head>
+
+<body>
+    <form action="/login" method="post">{% csrf_token %}
+
+        {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
+
+        <input type="text" placeholder="Enter Username" name="username" required>
+        <input type="password" placeholder="Enter Password" name="password" required>
+        <button type="submit">Login</button>
+    </form>
+</body>
+
+</html>
