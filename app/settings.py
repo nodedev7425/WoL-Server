@@ -28,6 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = env('DEBUG')
+APPEND_SLASH = True
 
 ALLOWED_HOSTS = []
 
