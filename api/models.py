@@ -1,5 +1,7 @@
 import uuid
-from datetime import datetime
+from django.utils import timezone
+
+from django.conf import settings
 
 from django.db import models
 from django.core.validators import RegexValidator
@@ -15,10 +17,15 @@ mac_validator = RegexValidator(
 
 class Device(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name =  models.CharField(max_length=255)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="devices"
+    )
+    name = models.CharField(max_length=255)
     mac = models.CharField(max_length=17, unique=True, validators=[mac_validator])
     last_wake = models.DateTimeField(null=True, blank=True)
-    created = models.DateTimeField(default=datetime.now())
+    created = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name
@@ -26,4 +33,3 @@ class Device(models.Model):
 
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    devices = models.ManyToManyField(Device)
