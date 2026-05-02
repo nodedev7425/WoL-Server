@@ -18,7 +18,7 @@ class Device(models.Model):
     name =  models.CharField(max_length=255)
     mac = models.CharField(max_length=17, unique=True, validators=[mac_validator])
     last_wake = models.DateTimeField(null=True, blank=True)
-    created = models.DateTimeField(db_default=datetime.now())
+    created = models.DateTimeField(default=datetime.now())
 
     def __str__(self):
         return self.name
