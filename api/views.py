@@ -1,10 +1,15 @@
-from api.models import User
-from rest_framework import permissions, viewsets
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
-from api.serializers import UserSerializer
+from api.serializers import DeviceSerializer
 
+class UserViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all().order_by("-date_joined")
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    @action(detail=False, methods=["get"], url_path="me/devices")
+    def devices(self, request):
+        devices = request.user.devices.all()
+        serializer = DeviceSerializer(devices, many=True)
+        return Response(serializer.data)

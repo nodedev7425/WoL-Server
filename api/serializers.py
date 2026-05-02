@@ -1,7 +1,8 @@
-from django.contrib.auth.models import Group, User
 from rest_framework import serializers
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+from api.models import Device
+
+class DeviceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ["url", "username", "email", "groups"]
+        model = Device
+        fields = ["id", "name", "mac", "last_wake", "created"]
