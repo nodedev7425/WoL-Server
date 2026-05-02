@@ -22,6 +22,7 @@ from app.pages import index
 from app.pages import login
 
 from rest_framework import routers
+from rest_framework.authtoken import views as rest_auth
 
 from api import views
 
@@ -34,5 +35,5 @@ urlpatterns = [
     path('login', login.login_view, name = 'login'),
 
     path('api/', include(router.urls)),
-    path("api-auth/", include("rest_framework.urls"))
+    path('api-auth/', rest_auth.obtain_auth_token)
 ]
