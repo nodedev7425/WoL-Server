@@ -23,7 +23,7 @@ class Device(models.Model):
         related_name="devices"
     )
     name = models.CharField(max_length=255)
-    mac = models.CharField(max_length=17, unique=True, validators=[mac_validator])
+    mac = models.CharField(max_length=17, validators=[mac_validator])
     last_wake = models.DateTimeField(null=True, blank=True)
     created = models.DateTimeField(default=timezone.now)
 
