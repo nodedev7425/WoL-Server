@@ -5,6 +5,7 @@ from rest_framework.response import Response
 
 from api.serializers import DeviceSerializer
 
+
 class UserViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
@@ -13,3 +14,14 @@ class UserViewSet(viewsets.ViewSet):
         devices = request.user.devices.all()
         serializer = DeviceSerializer(devices, many=True)
         return Response(serializer.data)
+
+
+class DeviceViewSet(viewsets.ModelViewSet):
+    serializer_class = DeviceSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Device.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

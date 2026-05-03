@@ -30,4 +30,32 @@ async function loadDeviceData() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', loadDeviceData);
+async function createDevice(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+
+    const data = {
+        name: form.name.value,
+        mac: form.mac.value
+    };
+
+    const csrfToken = getCookie('csrftoken');
+
+    await fetch('/api/devices/', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify(data)
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadDeviceData();
+
+    const form = document.getElementById('createForm');
+    form.addEventListener('submit', createDevice);
+});

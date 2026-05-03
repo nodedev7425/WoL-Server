@@ -12,6 +12,8 @@ markdown = "*"
 django-filter = "*"
 
 [dev-packages]
+django-rest-swagger = "*"
+drf-spectacular = "*"
 
 [requires]
 python_version = "3.12"
