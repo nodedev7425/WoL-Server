@@ -30,7 +30,11 @@ async function loadDeviceData() {
     }
 }
 
-async function createDevice(event) {
+function addDeviceToGrid() {
+    
+}
+
+async function createDevice() {
     event.preventDefault();
     
     const form = event.target;
@@ -57,5 +61,10 @@ document.addEventListener('DOMContentLoaded', () => {
     loadDeviceData();
 
     const form = document.getElementById('createForm');
-    form.addEventListener('submit', createDevice);
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        createDevice()
+        setTimeout(() => form.submit(), 2000)
+    });
 });
