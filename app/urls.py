@@ -18,25 +18,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from app.pages import index, login
+from rest_framework.authtoken import views
 
-from rest_framework import routers
-from rest_framework.authtoken import views as rest_auth
-
-from api import views
+from app.views import IndexView, LoginView
+from api.views import WakeView
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
-router = routers.DefaultRouter()
-router.register("users", views.UserViewSet, basename="users")
-router.register("devices", views.DeviceViewSet, basename="devices")
-
 urlpatterns = [
-    path('', index.index_view, name = 'index'),
-    path('login', login.login_view, name = 'login'),
+    path('', IndexView.as_view(), name = 'index'),
+    path('login', LoginView.as_view(), name = 'login'),
 
-    path('api/', include(router.urls)),
-    path('api-auth/', rest_auth.obtain_auth_token),
+    path('api-token-auth/', views.obtain_auth_token),
+    path('api/wake/', WakeView.as_view(), name='wake'),
 
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema')),
