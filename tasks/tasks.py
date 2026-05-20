@@ -18,7 +18,6 @@ logging.basicConfig(
     level=logging.INFO,
 )
 
-
 RESOLVING_INTERFACE = getattr(settings, "RESOLVING_INTERFACE")
 IP_RESOLVING_RANGE = getattr(settings, "IP_RESOLVING_RANGE")
 RESOLVING_INTERVAL = getattr(settings, "RESOLVING_INTERVAL")
@@ -27,7 +26,7 @@ def ip_resolve_task():
     
     for device in Device.objects.all().values('mac').distinct():
 
-        ip_address = get_ip_from_mac(device['mac'], "enx806d970a7d1b", IP_RESOLVING_RANGE)
+        ip_address = get_ip_from_mac(device['mac'], RESOLVING_INTERFACE, IP_RESOLVING_RANGE)
 
         if ip_address:
             Device.objects.filter(mac=device['mac']).update(
