@@ -30,7 +30,8 @@ urlpatterns = [
     path('login', LoginView.as_view(), name = 'login'),
 
     path('api-token-auth/', views.obtain_auth_token),
-    path('api/wake/', WakeView.as_view(), name='wake'),
+   
+    path('api/devices/<uuid:device_id>/wake/', WakeView.as_view(), name='wake'),
 
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema')),

@@ -15,13 +15,7 @@ class WakeView(GenericAPIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
-
-        device_id = request.GET.get('device_id')
-
-        if not device_id:
-            return Response({"detail": f"Missing required argument 'device_id'"}, 
-                status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, device_id):
 
         try:
             target_device = Device.objects.get(id=device_id)
@@ -38,14 +32,9 @@ class WakeView(GenericAPIView):
             return Response({"detail": f"Invalid MAC address format '{target_device.mac}'"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        except ValidationError:
-            return Response({"detail": f"Invalid 'device_id' format. Value '{device_id}' is not a valid UUID."}, 
-                status=status.HTTP_400_BAD_REQUEST)
-
         except Device.DoesNotExist:
             return Response({"detail": f"No device with id '{device_id}' found."}, 
                 status=status.HTTP_404_NOT_FOUND)
-
 
         return Response(
             {"detail": "Wake signal sent."},
