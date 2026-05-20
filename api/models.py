@@ -28,14 +28,33 @@ class Device(models.Model):
         on_delete=models.CASCADE,
         related_name="devices"
     )
-    name = models.CharField(max_length=255)
-    mac = models.CharField(max_length=17, validators=[mac_validator])
-    last_wake = models.DateTimeField(null=True, blank=True)
-    created = models.DateTimeField(default=timezone.now)
+
+    name = models.CharField(
+        max_length=255
+    )
+
+    mac = models.CharField(
+        max_length=17, 
+        validators=[mac_validator]
+    )
+
+    last_wake = models.DateTimeField(
+        null=True, 
+        blank=True
+    )
+
+    created = models.DateTimeField(
+        default=timezone.now
+    )
 
     def __str__(self):
         return self.name
 
 
 class User(AbstractUser):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    id = models.UUIDField(
+        primary_key=True, 
+        default=uuid.uuid4, 
+        editable=False
+    )
