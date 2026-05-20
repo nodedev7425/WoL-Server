@@ -1,18 +1,28 @@
-from django.http import HttpResponse
-from django.template import loader
+from django.views import View
+from django.shortcuts import render 
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_protect
 
-@login_required(login_url='/login')
-def index_view(request):
-    template = loader.get_template('index.html')
-    return HttpResponse(template.render())
+from api.serializers import DeviceSerializer
 
-@csrf_protect
-def login_view(request):
-    if request.method == "POST":
-        print("Post")
+class IndexView(LoginRequiredMixin, View):
 
-    template = loader.get_template('login.html')
-    return HttpResponse(template.render())
+    login_url = "/login/"
+
+    def get(self, request, *args, **kwargs):
+
+        context = {
+            "devices": DeviceSerializer(
+                request.user.devices.all(),
+                many=True
+            ).data
+        }
+
+        return render(request, "index.html", context) 
+
+class LoginView(View):
+
+    @csrf_protect
+    def get(self, request, *args, **kwargs):
+        return render(request, "login.html") 

@@ -15,6 +15,8 @@
     {% load bootstrap5 %}
     {% bootstrap_css %}   
     {% bootstrap_javascript %}
+
+    <script type="text/javascript" src="{% static 'js/devices.js' %}"></script>
 </head>
 
 <body>
@@ -28,7 +30,29 @@
     <h1>Hello, {{ request.user.username }}</h1>
     <p>Welcome to my first Django project!</p>
 
-    <div id="deviceGrid" class="container"></div>
+    <div id="deviceGrid" class="container mt-4">
+        <div class="row g-3">
+        {% for device in devices %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+
+                <div class="card shadow-sm h-100">
+                    <div class="card-body" data-device-id="{{ device.id }}"> 
+
+                        <h5 class="card-title">
+                            {{ device.name }}
+                        </h5>
+
+                        <p class="card-text">
+                            MAC: {{ device.mac }}
+                        </p>
+
+                        <button class="btn btn-primary" onclick="wakeDevice(event)">Wake up</button>
+                    </div>
+                </div>
+            </div> 
+        {% endfor %} 
+        </div>
+    </div>
 
     <div class="modal" id="createModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
@@ -44,7 +68,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-primary" onsubmit="createDevice(event)">Save changes</button>
                     </div>
                 </form>
             </div>
@@ -52,8 +76,6 @@
     </div>
 
     <button type="button" id="btnCreate" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#createModal">+</button>
-
-    <script type="text/javascript" src="{% static 'js/devices.js' %}"></script>
 </body>
 
 </html>
