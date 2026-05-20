@@ -11,12 +11,10 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 import os
-import environ
 from pathlib import Path
+from dotenv import load_dotenv
 
-env = environ.Env(
-  DEBUG=(bool, False)
-)
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
-DEBUG = env('DEBUG')
+DEBUG = os.environ.get('DEBUG', True)
 APPEND_SLASH = True
 
 ALLOWED_HOSTS = []
@@ -36,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'app',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,7 +46,8 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'bootstrap5',
     'utils',
-    'api'
+    'api',
+    'tasks',
 ]
 
 MIDDLEWARE = [
@@ -115,8 +115,8 @@ AUTH_USER_MODEL = "api.User"
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = env('LANGUAGE_CODE', default='en-us')
-TIME_ZONE = env('TIME_ZONE', default='UTC')
+LANGUAGE_CODE = os.environ.get('LANGUAGE_CODE', default='en-us')
+TIME_ZONE = os.environ.get('TIME_ZONE', default='UTC')
 USE_I18N = True
 USE_TZ = True
 
@@ -140,3 +140,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ]
 }
+
+# IP Resolving
+
+RESOLVING_INTERFACE = os.environ.get('RESOLVING_INTERFACE', default='eth0')
+IP_RESOLVING_RANGE = os.environ.get('IP_RESOLVING_RANGE', default='192.168.1.0/24')
+RESOLVING_INTERVAL= os.environ.get('RESOLVING_INTERVAL', default=1)

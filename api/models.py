@@ -38,6 +38,11 @@ class Device(models.Model):
         validators=[mac_validator]
     )
 
+    last_ip = models.GenericIPAddressField(
+        null=True,
+        blank=True
+    )
+
     last_wake = models.DateTimeField(
         null=True, 
         blank=True

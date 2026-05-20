@@ -5,12 +5,14 @@ name = "pypi"
 
 [packages]
 django = "*"
-django-environ = "*"
 django-bootstrap-v5 = "*"
 djangorestframework = "*"
 markdown = "*"
 django-filter = "*"
 wakeonlan = "*"
+apscheduler = "*"
+scapy = "*"
+python-dotenv = "*"
 
 [dev-packages]
 django-rest-swagger = "*"
