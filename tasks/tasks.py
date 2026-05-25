@@ -20,7 +20,7 @@ logging.basicConfig(
 
 RESOLVING_INTERFACE = getattr(settings, "RESOLVING_INTERFACE")
 IP_RESOLVING_RANGE = getattr(settings, "IP_RESOLVING_RANGE")
-RESOLVING_INTERVAL = getattr(settings, "RESOLVING_INTERVAL")
+RESOLVING_INTERVAL = int(getattr(settings, "RESOLVING_INTERVAL"))
 
 def ip_resolve_task():
     
