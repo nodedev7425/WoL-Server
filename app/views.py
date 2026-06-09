@@ -1,8 +1,9 @@
 from django.views import View
-from django.shortcuts import render 
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
 
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.decorators.csrf import csrf_protect
 
 from api.serializers import DeviceSerializer
 
@@ -23,22 +24,23 @@ class IndexView(LoginRequiredMixin, View):
 
 class LoginView(View):
 
-    @csrf_protect
+    def post(self, request, *args, **kwargs):
+        
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect(request.POST['next'])
+        else:
+            return JsonResponse({'error': 'Authentication failed'}, status=401)
+
     def get(self, request, *args, **kwargs):
 
         if request.user.is_authenticated:
-            return redirect(request.POST['next'])
+            return redirect(request.GET.get('next', '/'))
 
-        if request.method == 'POST':
-            username = request.POST['username']
-            password = request.POST['password']
 
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect(request.POST['next'])
-            else:
-                return JsonResponse({'error': 'Authentication failed'}, status=401)
-
-        next_url = request.GET.get('next', '')
+        next_url = request.GET.get('next', '/')
         return render(request, 'login.html', { 'next': next_url })
