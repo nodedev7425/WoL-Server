@@ -14,11 +14,12 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(dotenv_path=os.path.join(BASE_DIR, '.env'), 
+    verbose=True)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -30,10 +31,48 @@ APPEND_SLASH = True
 
 ALLOWED_HOSTS = []
 
+# Redis
+REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
+
+# Channel layer definitions
+# http://channels.readthedocs.io/en/latest/topics/channel_layers.html
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [{
+                "address": "redis://127.0.0.1:6379/1",
+                "socket_timeout": None,
+            }],
+        },
+    },
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/2",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+
+            "SOCKET_CONNECT_TIMEOUT": 5,   # seconds
+            "SOCKET_TIMEOUT": 5,           # seconds
+
+            "CONNECTION_POOL_KWARGS": {
+                "max_connections": 100,
+            },
+        },
+    }
+}
+
+# ASGI
+
+ASGI_APPLICATION = 'app.asgi.application'
 
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'app',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,9 +84,11 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'drf_spectacular',
     'bootstrap5',
+    'channels',
     'utils',
     'api',
     'tasks',
+    'devtools',
 ]
 
 MIDDLEWARE = [
@@ -143,6 +184,6 @@ REST_FRAMEWORK = {
 
 # IP Resolving
 
-RESOLVING_INTERFACE = os.environ.get('RESOLVING_INTERFACE', default='eth0')
-IP_RESOLVING_RANGE = os.environ.get('IP_RESOLVING_RANGE', default='192.168.1.0/24')
-RESOLVING_INTERVAL= os.environ.get('RESOLVING_INTERVAL', default=1)
+RESOLVING_INTERFACE = os.getenv('RESOLVING_INTERFACE', default='eth0')
+IP_RESOLVING_RANGE = os.getenv('IP_RESOLVING_RANGE', default='192.168.1.0/24')
+RESOLVING_INTERVAL = os.getenv('RESOLVING_INTERVAL', default=1)

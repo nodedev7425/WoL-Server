@@ -13,10 +13,14 @@ wakeonlan = "*"
 apscheduler = "*"
 scapy = "*"
 python-dotenv = "*"
+channels-redis = "*"
+daphne = "*"
+drf-spectacular = "*"
+ping3 = "*"
+redis = "*"
+hiredis = "*"
 
 [dev-packages]
-django-rest-swagger = "*"
-drf-spectacular = "*"
 
 [requires]
 python_version = "3.12"

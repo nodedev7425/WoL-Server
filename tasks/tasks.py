@@ -7,10 +7,11 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 from django.conf import settings
 from django.utils import timezone
+from django.core.cache import cache
 
 from api.models import Device
-
-from utils.mactools import get_ip_from_mac
+import os
+from utils.iptools import get_ip_from_mac
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -23,7 +24,7 @@ IP_RESOLVING_RANGE = getattr(settings, "IP_RESOLVING_RANGE")
 RESOLVING_INTERVAL = int(getattr(settings, "RESOLVING_INTERVAL"))
 
 def ip_resolve_task():
-    
+
     for device in Device.objects.all().values('mac').distinct():
 
         ip_address = get_ip_from_mac(device['mac'], RESOLVING_INTERFACE, IP_RESOLVING_RANGE)
@@ -34,7 +35,12 @@ def ip_resolve_task():
             )
 
 def is_online_broadcast():
-    pass
+    
+    active_device_users:dict = cache.get('active_device_users')
+    
+    for key in active_device_users.keys():
+        
+    
 
 def start_tasks():
 

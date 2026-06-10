@@ -37,3 +37,20 @@ window.wakeDevice = async function(event) {
         }
     });
 };
+
+window.addEventListener("load", (event) => {
+    const chatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/devices/updates/'
+    );
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        console.log(data.message)
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+});

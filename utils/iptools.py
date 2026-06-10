@@ -1,6 +1,8 @@
 from scapy.all import ARP, Ether, srp, get_if_hwaddr
 
-def get_ip_from_mac(mac_address, iface="eth0", pdst="192.168.1.0/24"):
+from ping3 import ping
+
+def get_ip_from_mac(mac_address, iface, pdst):
 
     pkt = Ether(dst="ff:ff:ff:ff:ff:ff") / ARP(pdst=pdst)
 
@@ -11,3 +13,6 @@ def get_ip_from_mac(mac_address, iface="eth0", pdst="192.168.1.0/24"):
             return rcv[ARP].psrc
 
     return None
+
+def is_ip_reachable(ip_address, iface):
+    return bool(ping(ip_address, interface=iface))
