@@ -67,13 +67,13 @@ CACHES = {
 
 # ASGI
 
-ASGI_APPLICATION = 'app.asgi.application'
+ASGI_APPLICATION = 'core.asgi.application'
 
 # Application definition
 
 INSTALLED_APPS = [
     'daphne',
-    'app',
+    'core',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -101,12 +101,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'app.urls'
+ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'app', 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'core', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,7 +118,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'app.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
@@ -168,7 +168,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'app', 'static')
+    os.path.join(BASE_DIR, 'core', 'static')
 ]
 
 
@@ -186,4 +186,6 @@ REST_FRAMEWORK = {
 
 RESOLVING_INTERFACE = os.getenv('RESOLVING_INTERFACE', default='eth0')
 IP_RESOLVING_RANGE = os.getenv('IP_RESOLVING_RANGE', default='192.168.1.0/24')
-RESOLVING_INTERVAL = os.getenv('RESOLVING_INTERVAL', default=1)
+
+RESOLVING_INTERVAL = os.getenv('RESOLVING_INTERVAL', default=60)
+SCANNING_INTERVAL = os.getenv('SCANNING_INTERVAL', default=10)

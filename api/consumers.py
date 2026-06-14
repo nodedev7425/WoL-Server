@@ -1,3 +1,5 @@
+import json
+
 from django.conf import settings
 from django.core.cache import cache
 
@@ -32,9 +34,7 @@ class DeviceStatusConsumer(AsyncWebsocketConsumer):
         await cache.aset("active_device_users", active)
 
         await self.accept()
-    
-    async def receive(self, text_data=None, bytes_data=None):
-        pass
+
 
     async def disconnect(self, code):
         
@@ -60,3 +60,9 @@ class DeviceStatusConsumer(AsyncWebsocketConsumer):
                     del active[user_id]
 
             await cache.aset("active_device_users", active)
+
+    async def ip_changed(self, event):
+        await self.send(text_data=json.dumps(event))
+    
+    async def status_changed(self, event):
+        await self.send(text_data=json.dumps(event))

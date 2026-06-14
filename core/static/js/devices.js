@@ -47,7 +47,14 @@ window.addEventListener("load", (event) => {
 
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        console.log(data.message)
+
+        if (data.type == "status_changed") {
+            console.log(data.device + " has changed status to " + data.status)
+        } else if (data.type == "ip_changed") {
+
+        } else {
+            console.error("Unexpected socket message: " + data)
+        }
     };
 
     chatSocket.onclose = function(e) {
