@@ -48,8 +48,15 @@ window.addEventListener("load", (event) => {
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
 
-        if (data.type == "status_changed") {
+        if (data.type == "status_init") {
+
+            // TODO: ignore init whenever there is a set status so far
+
             console.log(data.device + " has changed status to " + data.status)
+
+        } else if (data.type == "status_changed") {
+
+
         } else if (data.type == "ip_changed") {
 
         } else {

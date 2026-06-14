@@ -8,7 +8,7 @@ from rest_framework.response import Response
 
 from api.models import Device
 
-from api.services import WakeService
+from core.services import WakeService
 
 class WakeView(GenericAPIView):
 

@@ -2,8 +2,6 @@ import os
 import logging
 import sys
 
-from enum import Enum
-
 from datetime import datetime
 
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -17,7 +15,13 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 from api.models import Device
-from utils.iptools import get_ip_from_mac, is_ip_reachable
+
+from tasks.services import ResolveService
+
+
+RESOLVING_INTERVAL = int(getattr(settings, "RESOLVING_INTERVAL"))
+SCANNING_INTERVAL = int(getattr(settings, "SCANNING_INTERVAL"))
+
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -25,27 +29,13 @@ logging.basicConfig(
     level=logging.INFO,
 )
 
-class DeviceStatus(Enum):
-    UNRESOLVEABLE=1
-    UNREACHABLE=2
-    ONLINE=3
-
-RESOLVING_INTERFACE = getattr(settings, "RESOLVING_INTERFACE")
-IP_RESOLVING_RANGE = getattr(settings, "IP_RESOLVING_RANGE")
-
-RESOLVING_INTERVAL = int(getattr(settings, "RESOLVING_INTERVAL"))
-SCANNING_INTERVAL = int(getattr(settings, "SCANNING_INTERVAL"))
 
 def ip_resolve_task():
 
     for device in Device.objects.all().values('mac').distinct():
 
-        ip_address = get_ip_from_mac(device['mac'], RESOLVING_INTERFACE, IP_RESOLVING_RANGE)
-
-        if ip_address:
-            Device.objects.filter(mac=device['mac']).update(
-                last_ip=ip_address
-            )
+        ResolveService.resolve_mac_address(device)
+        
 
 def is_online_broadcast():
     
@@ -55,31 +45,18 @@ def is_online_broadcast():
 
         for userid in active_device_users.keys():
 
-            devices = Device.objects.filter(user=userid)
+            changes = ResolveService.get_user_device_changes(userid)
 
-            for device in devices:
+            for change in changes:
 
-                last_ip = device.last_ip
-                last_status = cache.get(device.id)
-
-                if last_ip:
-                    if is_ip_reachable(last_ip, RESOLVING_INTERFACE):
-                        new_status=DeviceStatus.ONLINE
-                    else:
-                        new_status=DeviceStatus.UNREACHABLE
-                else:
-                    new_status=DeviceStatus.UNRESOLVEABLE
-
-                if last_status != new_status:
-
-                    async_to_sync(get_channel_layer().group_send)(
-                        f"user_{userid}", {
-                            "type": "status_changed",
-                            "device": str(device.id),
-                            "status": new_status.value
-                        })
-
-                cache.set(device.id, new_status, SCANNING_INTERVAL * 2) 
+                async_to_sync(get_channel_layer().group_send)(
+                    f"user_{userid}",
+                    {
+                        "type": "status_changed",
+                        "device": change['device'],
+                        "status": change['status'].value
+                    }
+                )  
         
 
 def start_tasks():

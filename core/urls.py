@@ -20,7 +20,7 @@ from django.urls import path, include
 
 from rest_framework.authtoken import views
 
-from app.views import IndexView, LoginView
+from core.views import IndexView, LoginView
 from api.views import WakeView
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView

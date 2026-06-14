@@ -1,9 +1,9 @@
-from wakeonlan import send_magic_packet
-
-from django.db import transaction
 from django.utils import timezone
 
+from wakeonlan import send_magic_packet
+
 from api.models import Device
+
 
 class WakeService:
 

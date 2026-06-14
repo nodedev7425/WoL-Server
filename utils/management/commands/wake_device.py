@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from api.services import WakeService
+from core.services import WakeService
 
 class Command(BaseCommand):
 
