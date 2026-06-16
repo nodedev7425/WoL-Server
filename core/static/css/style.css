@@ -6,3 +6,41 @@
 html {
     font-family: 'Inter', 'sans-serif';
 }
+
+@font-face {
+  font-family: 'Material Icons';
+  src: url('../fonts/MaterialIcons-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.status-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.status-online {
+    background-color: #198754;
+}
+
+.status-unreachable {
+    background-color: #ffc107;
+}
+
+.status-unresolvable {
+    background-color: #dc3545;
+}
+
+.status-unknown {
+    background-color: gray;
+}
