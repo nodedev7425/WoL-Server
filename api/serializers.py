@@ -3,6 +3,9 @@ from rest_framework import serializers
 from api.models import Device, User
 
 class DeviceSerializer(serializers.ModelSerializer):
+    created = serializers.DateTimeField(format="%Y-%m-%d %H:%M")
+    last_wake = serializers.DateTimeField(format="%Y-%m-%d %H:%M", required=False)
+
     class Meta:
         model = Device
         fields = "__all__"

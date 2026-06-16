@@ -48,18 +48,57 @@ window.addEventListener("load", (event) => {
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
 
-        if (data.type == "status_init") {
+        if (data.type == "status_init") 
+        {
+            const element = document.querySelector(
+                `[data-device-id="${data.device}"]`    
+            ).getElementsByClassName('status-dot')[0];
+            
+            if (element.classList.contains('status-unknown')) {
+                switch (data.status) {
+                    case 1:
+                        element.classList.add('status-unresolvable');
+                        break;
+                    case 2:
+                        element.classList.add('status-unreachable');
+                        break;
+                    case 3:
+                        element.classList.add('status-online');
+                        break;
+                }
+                element.classList.remove('status-unknown');
+            }
+        } 
+        else if (data.type == "status_changed") 
+        {
+            const element = document.querySelector(
+                `[data-device-id="${data.device}"]`    
+            ).getElementsByClassName('status-dot')[0];
 
-            // TODO: ignore init whenever there is a set status so far
+            element.classList.remove('status-unresolvable', 
+                'status-unreachable', 
+                'status-online'
+            );
 
-            console.log(data.device + " has changed status to " + data.status)
+            switch (data.status) {
+                case 1:
+                    element.classList.add('status-unresolvable');
+                    break;
+                case 2:
+                    element.classList.add('status-unreachable');
+                    break;
+                case 3:
+                    element.classList.add('status-online');
+                    break;
+            }
+        } 
+        else if (data.type == "ip_changed") 
+        {
 
-        } else if (data.type == "status_changed") {
 
-
-        } else if (data.type == "ip_changed") {
-
-        } else {
+        } 
+        else 
+        {
             console.error("Unexpected socket message: " + data)
         }
     };

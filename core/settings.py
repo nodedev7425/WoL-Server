@@ -158,6 +158,8 @@ AUTH_USER_MODEL = "api.User"
 
 LANGUAGE_CODE = os.environ.get('LANGUAGE_CODE', default='en-us')
 TIME_ZONE = os.environ.get('TIME_ZONE', default='UTC')
+DATE_FORMAT = "Y-m-d"
+USE_L10N = False
 USE_I18N = True
 USE_TZ = True
 
