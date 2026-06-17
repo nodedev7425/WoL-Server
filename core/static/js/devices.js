@@ -4,9 +4,53 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-window.createDevice = async function(event) {
+function fade(element) {
+    var op = 1;
+    var timer = setInterval(function () {
+        if (op <= 0.1){
+            clearInterval(timer);
+            element.style.display = 'none';
+        }
+        element.style.opacity = op;
+        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        op -= op * 0.1;
+    }, 50);
+}
+
+function showAlert(message, type = "primary", timeout = 5000) {
+    const container = document.getElementById("alert-placeholder");
+
+    const existing = container.querySelector(".alert");
+    if (existing) {
+        existing.remove();
+    }
+
+    const alert = document.createElement("div");
+    alert.className = `alert alert-${type}`;
+    alert.role = "alert";
+
+    alert.innerHTML = `
+        <span>${message}</span>
+        <button type="button" class="alert-remove-btn">×</button>
+    `;
+
+    container.appendChild(alert);
+
+    alert.querySelector(".alert-remove-btn")
+        .addEventListener("click", () => fade(alert));
+
+    if (timeout) {
+        setTimeout(() => {
+            if (alert.parentNode) {
+                fade(alert);
+            }
+        }, timeout);
+    }
+}
+
+window.createDevice = async function (event) {
     event.preventDefault();
-    
+
     const form = event.target;
 
     const data = {
@@ -25,7 +69,7 @@ window.createDevice = async function(event) {
     });
 };
 
-window.wakeDevice = async function(event) {
+window.wakeDevice = async function (event) {
     const parent = event.target.closest(".card-body");
     const url = window.origin + '/api/devices/' + parent.dataset.deviceId + '/wake/'
 
@@ -36,6 +80,8 @@ window.wakeDevice = async function(event) {
             "X-CSRFToken": getCookie("csrftoken"),
         }
     });
+
+    showAlert("Wake command sent successfully.", "success");
 };
 
 window.addEventListener("load", (event) => {
@@ -45,15 +91,14 @@ window.addEventListener("load", (event) => {
         + '/ws/devices/updates/'
     );
 
-    chatSocket.onmessage = function(e) {
+    chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
 
-        if (data.type == "status_init") 
-        {
+        if (data.type == "status_init") {
             const element = document.querySelector(
-                `[data-device-id="${data.device}"]`    
+                `[data-device-id="${data.device}"]`
             ).getElementsByClassName('status-dot')[0];
-            
+
             if (element.classList.contains('status-unknown')) {
                 switch (data.status) {
                     case 1:
@@ -68,15 +113,14 @@ window.addEventListener("load", (event) => {
                 }
                 element.classList.remove('status-unknown');
             }
-        } 
-        else if (data.type == "status_changed") 
-        {
+        }
+        else if (data.type == "status_changed") {
             const element = document.querySelector(
-                `[data-device-id="${data.device}"]`    
+                `[data-device-id="${data.device}"]`
             ).getElementsByClassName('status-dot')[0];
 
-            element.classList.remove('status-unresolvable', 
-                'status-unreachable', 
+            element.classList.remove('status-unresolvable',
+                'status-unreachable',
                 'status-online'
             );
 
@@ -91,19 +135,17 @@ window.addEventListener("load", (event) => {
                     element.classList.add('status-online');
                     break;
             }
-        } 
-        else if (data.type == "ip_changed") 
-        {
+        }
+        else if (data.type == "ip_changed") {
 
 
-        } 
-        else 
-        {
+        }
+        else {
             console.error("Unexpected socket message: " + data)
         }
     };
 
-    chatSocket.onclose = function(e) {
+    chatSocket.onclose = function (e) {
         console.error('Chat socket closed unexpectedly');
     };
 });
