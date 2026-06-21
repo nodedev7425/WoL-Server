@@ -138,3 +138,12 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+# Debian packaging #
+.debhelper/
+build-venv/
+debian/wold-server/
+debian/files
+debhelper-build-stamp
+*.debhelper
+*.substvars

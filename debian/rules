@@ -1,0 +1,23 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+override_dh_auto_install:
+	python3.12 -m venv build-venv
+	build-venv/bin/pip install --upgrade pip pipenv
+
+	PIPENV_VENV_IN_PROJECT=1 build-venv/bin/pipenv sync
+
+	install -d $(CURDIR)/debian/wold-server/opt/wold/app
+	install -d $(CURDIR)/debian/wold-server/opt/wold/venv
+
+	rsync -a \
+		--exclude ".venv" \
+        --exclude "debian" \
+		--exclude "__pycache__" \
+		--exclude ".git" \
+		$(CURDIR)/ \
+		$(CURDIR)/debian/wold-server/opt/wold/app/
+
+	cp -a .venv $(CURDIR)/debian/wold-server/opt/wold/venv

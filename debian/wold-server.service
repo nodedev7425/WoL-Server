@@ -1,0 +1,7 @@
+[Unit]
+Description=Wake On LAN Dashboard
+
+[Service]
+
+[Install]
+WantedBy=multi-user.target

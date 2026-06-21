@@ -1,0 +1,19 @@
+Source: wold-server
+Section: web
+Priority: optional
+Maintainer: Lenard Büsing <nodedev74@tuta.com>
+Build-Depends:
+ debhelper-compat (= 13),
+ python3-all,
+ python3.12-venv
+Standards-Version: 4.7.0
+
+Package: wold-server
+Architecture: all
+Depends:
+ ${misc:Depends},
+ ${python3:Depends},
+ python3-django,
+ python3-gunicorn
+Description: Wake On LAN Dashboard
+ Web interface for managing Wake-on-LAN devices.
