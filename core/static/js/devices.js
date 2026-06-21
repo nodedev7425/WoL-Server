@@ -5,14 +5,17 @@ function getCookie(name) {
 }
 
 function fade(element) {
-    var op = 1;
-    var timer = setInterval(function () {
-        if (op <= 0.1){
+    let op = 1;
+
+    const timer = setInterval(() => {
+        if (op <= 0.1) {
             clearInterval(timer);
-            element.style.display = 'none';
+            element.remove();
+            return;
         }
+
         element.style.opacity = op;
-        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        element.style.filter = `alpha(opacity=${op * 100})`;
         op -= op * 0.1;
     }, 50);
 }
@@ -26,12 +29,14 @@ function showAlert(message, type = "primary", timeout = 5000) {
     }
 
     const alert = document.createElement("div");
-    alert.className = `alert alert-${type}`;
+    alert.className = `alert alert-${type} d-flex justify-content-between align-items-center`;
     alert.role = "alert";
 
     alert.innerHTML = `
         <span>${message}</span>
-        <button type="button" class="alert-remove-btn">×</button>
+        <button type="button" class="alert-remove-btn">
+            <span class="material-icons">close_small</span>
+        </button>
     `;
 
     container.appendChild(alert);
@@ -91,6 +96,10 @@ window.addEventListener("load", (event) => {
         + '/ws/devices/updates/'
     );
 
+    window.addEventListener('beforeunload', () => {
+        chatSocket.close(1000, 'Page unloading');
+    });
+
     chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
 
@@ -146,6 +155,27 @@ window.addEventListener("load", (event) => {
     };
 
     chatSocket.onclose = function (e) {
-        console.error('Chat socket closed unexpectedly');
+        if (e.code === 1000) {
+            return;
+        }
+
+        console.error("Socket connection closed with reason: " + e.reason);
+
+        const cardElements = document.getElementsByClassName('card-body');
+
+        for (const element of cardElements) {
+            const statusElement = element.querySelector('.status-dot');
+
+            statusElement.classList.remove(
+                'status-unresolvable',
+                'status-unreachable',
+                'status-online',
+                'status-unknown'
+            );
+
+            statusElement.classList.add('status-unknown');
+        }
+
+        showAlert("Unexpected disconnect from server. Refresh the website to establish a new connection.", "danger", null);
     };
 });
