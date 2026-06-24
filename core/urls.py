@@ -27,7 +27,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
     path('', IndexView.as_view(), name = 'index'),
-    path('login', LoginView.as_view(), name = 'login'),
+    path('login/', LoginView.as_view(), name = 'login'),
 
     path('api-token-auth/', views.obtain_auth_token),
    
