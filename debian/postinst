@@ -1,0 +1,20 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    configure)
+
+        # Django
+        /opt/wold-server/venv/bin/python /opt/wold-server/app/manage.py migrate --noinput
+        /opt/wold-server/venv/bin/python /opt/wold-server/app/manage.py collectstatic --noinput
+
+        # NGINX
+        ln -sf \
+                /etc/nginx/sites-available/wold-server.nginx \
+                /etc/nginx/sites-enabled/wold-server
+
+        systemctl reload nginx 2>/dev/null || true  
+    ;;
+esac
+
+exit 0

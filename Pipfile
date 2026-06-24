@@ -19,6 +19,7 @@ drf-spectacular = "*"
 ping3 = "*"
 redis = "*"
 hiredis = "*"
+django-redis = "*"
 
 [dev-packages]
 

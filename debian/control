@@ -12,8 +12,7 @@ Package: wold-server
 Architecture: all
 Depends:
  ${misc:Depends},
- ${python3:Depends},
- python3-django,
- python3-gunicorn
+ nginx,
+ redis-server
 Description: Wake On LAN Dashboard
  Web interface for managing Wake-on-LAN devices.

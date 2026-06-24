@@ -26,10 +26,14 @@ load_dotenv(dotenv_path=os.path.join(BASE_DIR, '.env'),
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-DEBUG = os.environ.get('DEBUG', True)
+DEBUG = os.environ.get('DEBUG') == 'True'
+
 APPEND_SLASH = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
 
 # Redis
 REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
@@ -167,8 +171,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
-
+STATIC_URL = '/static/'
+STATIC_ROOT = '/opt/wold-server/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'core', 'static')
 ]

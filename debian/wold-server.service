@@ -1,7 +1,15 @@
 [Unit]
 Description=Wake On LAN Dashboard
+After=network.target redis-server.service
+Requires=redis-server.service
 
 [Service]
+Type=simple
+Environment=DJANGO_SETTINGS_MODULE=core.settings
+Environment=DEBUG=False
+EnvironmentFile=-/etc/wold-server/wold-server.conf
+ExecStart=/usr/bin/woldctl run
+Restart=always
 
 [Install]
 WantedBy=multi-user.target

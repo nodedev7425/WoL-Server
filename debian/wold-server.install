@@ -1,0 +1,3 @@
+debian/wold-server.conf etc/wold-server
+debian/woldctl usr/bin
+debian/wold-server.nginx etc/nginx/sites-available

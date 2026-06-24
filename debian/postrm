@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    purge)
+        rm -rf /opt/wold-server
+    ;;
+esac
+
+exit 0
