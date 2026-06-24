@@ -9,15 +9,15 @@ override_dh_auto_install:
 
 	PIPENV_VENV_IN_PROJECT=1 build-venv/bin/pipenv sync
 
-	install -d $(CURDIR)/debian/wold-server/opt/wold/app
-	install -d $(CURDIR)/debian/wold-server/opt/wold/venv
+	install -d "$(CURDIR)/debian/wold-server/opt/wold/app"
+	install -d "$(CURDIR)/debian/wold-server/opt/wold/venv"
 
 	rsync -a \
 		--exclude ".venv" \
         --exclude "debian" \
 		--exclude "__pycache__" \
 		--exclude ".git" \
-		$(CURDIR)/ \
-		$(CURDIR)/debian/wold-server/opt/wold/app/
+		"$(CURDIR)/" \
+		"$(CURDIR)/debian/wold-server/opt/wold/app/"
 
-	cp -a .venv $(CURDIR)/debian/wold-server/opt/wold/venv
+	cp -a .venv "$(CURDIR)/debian/wold-server/opt/wold/venv"
