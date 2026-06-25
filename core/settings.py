@@ -30,10 +30,10 @@ DEBUG = os.environ.get('DEBUG') == 'True'
 
 APPEND_SLASH = True
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-]
+ALLOWED_HOSTS = os.environ.get(
+    'ALLOWED_HOSTS', 
+    '127.0.0.1 localhost'
+).split()
 
 # Redis
 REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')

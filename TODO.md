@@ -2,7 +2,7 @@
 
 ## v1.0 
 
-- [ ] Integrate ALLOWED_HOSTS into .conf and .env to be considered instead of hardcoding
+- [x] Integrate ALLOWED_HOSTS into .conf and .env to be considered instead of hardcoding
 - [ ] Solve 'collectstatic' warning of postinst
 - [ ] Remove 'devtools' app from installation package
 - [ ] Add Device API routes from create/delete/update
