@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+export DEBUG=False
+
 case "$1" in
     configure)
 
