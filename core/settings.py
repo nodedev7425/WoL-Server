@@ -23,10 +23,9 @@ load_dotenv(dotenv_path=os.path.join(BASE_DIR, '.env'),
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
-
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-DEBUG = os.environ.get('DEBUG') == 'True'
+DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
 APPEND_SLASH = True
 
@@ -77,7 +76,6 @@ ASGI_APPLICATION = 'core.asgi.application'
 
 INSTALLED_APPS = [
     'daphne',
-    'core',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -89,11 +87,16 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'bootstrap5',
     'channels',
+    'core',
     'utils',
     'api',
     'tasks',
-    'devtools',
 ]
+
+if DEBUG:
+    INSTALLED_APPS += [
+        'devtools',
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

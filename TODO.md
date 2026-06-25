@@ -4,7 +4,7 @@
 
 - [x] Integrate ALLOWED_HOSTS into .conf and .env to be considered instead of hardcoding
 - [ ] Solve 'collectstatic' warning of postinst
-- [ ] Remove 'devtools' app from installation package
+- [x] Remove 'devtools' app from installation package
 - [ ] Add Device API routes from create/delete/update
 - [ ] Finalize dashboard page
 - [ ] Create GitHub Flow to auto build and release package

@@ -20,6 +20,7 @@ override_dh_auto_install:
 		--exclude "__pycache__" \
 		--exclude ".git" \
 		--exclude ".github" \
+		--exclude "devtools" \
 		--exclude ".env" \
 		--exclude ".env.example" \
 		--exclude ".gitignore" \
